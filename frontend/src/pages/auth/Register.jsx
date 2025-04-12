@@ -1,45 +1,40 @@
 import { useState } from 'react'
-import { useNavigate, Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import ErrorBox from "./AuthErrorBox"
 
-function Login() {
-  const navigate = useNavigate();
-
-  const login = async () => {
-    await axios.post("http://localhost:3001/api/auth/login/", { email, password }, {
-      withCredentials: true
-    });
-    navigate("/dashboard");
-  }
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      await login();
-    }
-    catch(err) {
-      const data = err.response?.data;
-      setError({
-        title: data?.title || 'Login Error',
-        description: data?.description || data?.message || err.message
-      });
-    }
-  }
-
+function Register() {
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const [error, setError] = useState({ title: '', description: '' });
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    console.log({fullName, email, password});
+    await axios.post("/api/auth/register/", { fullName, email, password })
+        .then(() => {
+          // Success Toast here
+          navigate("/login");
+        })
+        .catch((error) => {
+          const data = error.response?.data;
+          setError({
+            title: data?.title || 'Registration Error',
+            description: data?.description || data?.message || error.message
+          });
+        });
+  };
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
       <div className="w-full max-w-sm">
         <div className="flex flex-col gap-6">
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleRegister}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center gap-2">
                 <a
@@ -51,11 +46,11 @@ function Login() {
                   </div>
                   <span className="sr-only">Hieroglyph.</span>
                 </a>
-                <h1 className="text-xl font-bold">Welcome to Hieroglyph</h1>
+                <h1 className="text-xl font-bold">Create an Account</h1>
                 <div className="text-center text-sm">
-                  Don&apos;t have an account?{" "}
-                  <Link to="/register" className="underline underline-offset-4">
-                    Sign up
+                  Already have an account?{" "}
+                  <Link to="/login" className="underline underline-offset-4">
+                    Sign in
                   </Link>
                 </div>
               </div>
@@ -65,6 +60,17 @@ function Login() {
                 onClear={() => setError({title: '', description: ''})}
               />
               <div className="flex flex-col gap-6">
+                <div className="grid gap-2">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="John Doe"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    required
+                  />
+                </div>
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -88,7 +94,7 @@ function Login() {
                   />
                 </div>
                 <Button type="submit" className="w-full">
-                  Login
+                  Register
                 </Button>
               </div>
             </div>
@@ -96,6 +102,6 @@ function Login() {
         </div>
       </div>
     </div>
-  )
-}
-export default Login
+  );
+};
+export default Register;

@@ -1,39 +1,31 @@
 import { useState } from 'react'
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "../../config/axiosConfig.js";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import ErrorBox from "./AuthErrorBox"
+import {useAuth} from "@/hooks/useAuth.js";
 
-function Register() {
+function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const login = async () => {
-    await axios.post("http://localhost:3001/api/auth/login/", { email, password }, {
-      withCredentials: true
-    });
-    navigate("/dashboard");
-  }
-
-  const handleRegister = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      await axios.post("http://localhost:3001/api/auth/register/", { name, email, password }, {
-        withCredentials: true
-      });
-      await login();
-    }
-    catch(err) {
-      const data = err.response?.data;
-      setError({ 
-        title: data?.title || 'Registration Error',
-        description: data?.description || data?.message || err.message
-      });
-    }
+    await axios.post('/api/auth/login', { email, password })
+        .then((response) => {
+          login(response.data.user);
+        })
+        .catch((error) => {
+          const data = error.response?.data;
+          setError({
+            title: data?.title || 'Login Error',
+            description: data?.description || data?.message || error.message
+          });
+        });
   }
 
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -43,7 +35,7 @@ function Register() {
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
       <div className="w-full max-w-sm">
         <div className="flex flex-col gap-6">
-          <form onSubmit={handleRegister}>
+          <form onSubmit={handleLogin}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center gap-2">
                 <a
@@ -57,7 +49,10 @@ function Register() {
                 </a>
                 <h1 className="text-xl font-bold">Welcome to Hieroglyph</h1>
                 <div className="text-center text-sm">
-                  Create an Account
+                  Don&apos;t have an account?{" "}
+                  <Link to="/register" className="underline underline-offset-4">
+                    Sign up
+                  </Link>
                 </div>
               </div>
               <ErrorBox 
@@ -66,17 +61,6 @@ function Register() {
                 onClear={() => setError({title: '', description: ''})}
               />
               <div className="flex flex-col gap-6">
-                <div className="grid gap-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Input
-                    id="name"
-                    type="text"
-                    placeholder="John Doe"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-                </div>
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -100,7 +84,7 @@ function Register() {
                   />
                 </div>
                 <Button type="submit" className="w-full">
-                  Register
+                  Login
                 </Button>
               </div>
             </div>
@@ -110,4 +94,4 @@ function Register() {
     </div>
   )
 }
-export default Register
+export default Login

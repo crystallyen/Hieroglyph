@@ -6,7 +6,7 @@ import cors from 'cors'
 
 const app = express()
 
-const port = process.env.PORT || 3001
+const port = 3001
 
 app.use(cors({
   origin: 'http://localhost:5173',
@@ -18,11 +18,26 @@ app.use(express.urlencoded({ extended: true }))
 app.use(session({
   secret: 'hieroglyph-secret-key',
   resave: false,
-  saveUninitialized: false
-}))
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // true in production (HTTPS)
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 // 1 day
+  }
+}));
+
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.get('/api/me', (req, res) => {
+  if (req.session.user) {
+    res.json({ user: req.session.user });
+  } else {
+    res.status(401).json({ user: null });
+  }
+});
+
 
 app.use('/api/auth', authRouter);
 

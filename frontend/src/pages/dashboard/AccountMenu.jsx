@@ -9,20 +9,13 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {useAuth} from "@/hooks/useAuth.js";
 
 function AccountMenu() {
   const navigate = useNavigate();
-
+    const {logout} = useAuth();
   const handleLogout = async () => {
-    try {
-      await axios.post("http://localhost:3001/api/auth/logout/", {}, {
-        withCredentials: true
-      });
-      navigate('/login')
-    }
-    catch(err) {
-      console.log(err);
-    }
+    await logout();
   }
 
   return (
