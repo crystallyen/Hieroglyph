@@ -9,20 +9,26 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.jsx";
 import {useAuth} from "@/hooks/useAuth.js";
 
 function AccountMenu() {
   const navigate = useNavigate();
-    const {logout} = useAuth();
+    const { user, logout } = useAuth();
   const handleLogout = async () => {
     await logout();
   }
-
+    console.log(user)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-      <Button>
-        <User /> Profile
+      <Button variant="" className="p-5 cursor-pointer">
+        <span className="">{user.fullName}</span>
+          <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>{user.fullName[0]}</AvatarFallback>
+          </Avatar>
+
       </Button>
       </ DropdownMenuTrigger>
       <DropdownMenuContent className="w-36">

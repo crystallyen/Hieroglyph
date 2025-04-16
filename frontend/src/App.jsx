@@ -4,10 +4,10 @@ import Register from "./pages/auth/Register.jsx"
 import Dashboard from "./pages/dashboard/Dashboard"
 import {AuthProvider} from "@/context/AuthContext.jsx";
 import {useAuth} from "@/hooks/useAuth.js";
+import DocumentEditor from "@/pages/document/DocumentEditor.jsx";
 
 const PublicRoute = ({ children }) => {
     const { isAuthenticated } = useAuth();
-    console.log(isAuthenticated);
     if (isAuthenticated) return <Navigate to="/dashboard" replace />;
 
     return children;
@@ -33,7 +33,8 @@ function App() {
                   <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
                   <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
                   <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-                  <Route path="/" element={<Navigate to="/signin" replace />} />
+                  <Route path="/" element={<Navigate to="/login" replace />} />
+                  <Route path="/doc/:documentId" element={<DocumentEditor />} />
               </Routes>
           </Router>
       </AuthProvider>
