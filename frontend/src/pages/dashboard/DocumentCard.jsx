@@ -15,11 +15,13 @@ import { Input } from "@/components/ui/input";
 export default function DocumentCard({ 
   title = "Untitled document", 
   timestamp = "Opened 2:10 AM",
-  onDelete = () => {},
-  onRename = () => {} 
+  onDelete,
+  onRename,
+  isNew 
+
 }) {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(isNew);
   const [newTitle, setNewTitle] = useState(title);
   const dropdownRef = useRef(null);
   const inputRef = useRef(null);
@@ -39,26 +41,25 @@ export default function DocumentCard({
   }, []);
 
   useEffect(() => {
-    if (isEditing && inputRef.current) {
-      inputRef.current.focus();
-      inputRef.current.select();
+    if (isEditing) {
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+          if(isNew)
+            inputRef.current.select();
+        }
+      }, 250);
     }
   }, [isEditing]);
-
-  const handleDotsClick = (e) => {
-    e.stopPropagation();
-    setShowDropdown(!showDropdown);
-  };
 
   const handleDelete = (e) => {
     e.stopPropagation();
     onDelete();
-    setShowDropdown(false);
   };
 
   const handleRenameFromDropdown = (e) => {
     e.stopPropagation();
-    setShowDropdown(false);
+
     setIsEditing(true);
   };
 
@@ -82,9 +83,9 @@ export default function DocumentCard({
   };
 
   return (
-    <Card className="transition-all duration-200 hover:shadow-md rounded-xl h-70 w-48 p-0">
-      <div className="bg-gray-200 h-70 w-full relative rounded-xl cursor-pointer">
-        <div className="absolute bottom-0 left-0 w-full bg-secondary p-2 rounded-b-xl">
+    <Card className="transition-all duration-200 hover:shadow-md rounded-xl min-h-78 w-48 p-0 border-0 overflow-hidden bg-transparent relative">
+      <div className="bg-gray-300 h-68 w-full rounded-xl cursor-pointer">
+        <div className="absolute bottom-0 left-0 w-full bg-secondary p-2 m-0 rounded-b-xl">
           <div className="group relative">
             {isEditing ? (
               <Input
@@ -98,19 +99,19 @@ export default function DocumentCard({
               />
             ) : (
               <div className="flex items-center">
-                <h1 className="text-sm font-bold text-left leading-tight">{title}</h1>
+                <h1 className="text-sm font-bold text-left leading-tight mt-1">{title}</h1>
                 <button
                   className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity"
                   onClick={handleStartEdit}
                 >
-                  <Pencil className="text-gray-400 hover:text-gray-600 w-3 h-3" />
+                  <Pencil className="text-white-400 hover:text-gray-600 w-3 h-3" />
                 </button>
               </div>
             )}
           </div>
           <div className="flex justify-between items-center text-xs text-gray-500 mt-1">
             <div className="flex items-center gap-1">
-              <span className="leading-none">{timestamp}</span>
+              <span className="leading-none text-l">{timestamp}</span>
             </div>
             <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <DropdownMenuTrigger asChild>
@@ -126,6 +127,13 @@ export default function DocumentCard({
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
                   Delete
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="text focus:text cursor-pointer"
+                  onClick={handleRenameFromDropdown}
+                >
+                  <Pencil className="mr-2 h-4 w-4" />
+                  Rename
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
