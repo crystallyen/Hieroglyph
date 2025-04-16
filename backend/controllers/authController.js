@@ -63,11 +63,6 @@ const loginController = (req, res, next) => {
   })(req, res, next);
 };
 
-const infoController = (req, res) => {
-  console.log("Info was asked");
-  return res.json({ message: req.user });
-};
-
 const logoutController = (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -78,4 +73,4 @@ const logoutController = (req, res) => {
   });
 }
 
-export { registerController, loginController, infoController, logoutController };
+export { registerController, loginController, logoutController };

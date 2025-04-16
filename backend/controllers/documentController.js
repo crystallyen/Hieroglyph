@@ -19,4 +19,65 @@ const getDocuments = async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-export default {getDocuments}
+
+const createDocument = async (req, res) => {
+  const userId = req.user.user_id;
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID not found.' });
+  }
+  try {
+    const document = await db('documents').insert({
+      user_id: userId,
+      title: 'Untitled Document',
+    }).returning('*');
+    return res.status(200).json({ document });
+  } catch (error) {
+    console.error('Error creating document:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const getDocument = async (req, res) => {
+  const { documentId } = req.params;
+  const userId = req.user && req.user.user_id;
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID not found.' });
+  }
+  try {
+    const document = await db('documents').where({ user_id: userId, document_id: documentId }).first('*');
+    if (!document) {
+      return res.status(404).json({ error: 'Document not found' });
+    }
+    return res.status(200).json(document);
+  } catch (error) {
+    console.error('Error creating document:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const updateDocumentContent = async (req, res) => {
+  const { documentId } = req.params;
+  const { content } = req.body;
+  const userId = req.user && req.user.user_id;
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID not found.' });
+  }
+  try {
+    console.log("UPdating")
+    const document = await db('documents').where({ user_id: userId, document_id: documentId }).update({ content, updated_at: new Date() });
+    if (!document || document.length === 0) {
+      return res.status(404).json({ error: 'Document not found' });
+    }
+    return res.status(200);
+  } catch (error) {
+    console.error('Error updating document:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+export {
+    getDocuments,
+    createDocument,
+    getDocument,
+    updateDocumentContent,
+};
