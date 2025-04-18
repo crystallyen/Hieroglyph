@@ -24,16 +24,6 @@ function Dashboard() {
     getDocuments();
   }, []);
 
-  const handleDelete = (id) => {
-  setDocuments(documents.filter(doc => doc.id !== id));
-  };
-
-const handleRename = (id, newTitle) => {
-  setDocuments(documents.map(doc => 
-    doc.document_id === id ? { ...doc, title: newTitle } : doc
-  ));
-  };
-
   const handleAddDocument = async () => {
     console.log("Add new doc");
     
@@ -46,6 +36,26 @@ const handleRename = (id, newTitle) => {
       // Toast here
     });
   };
+
+  const handleRenameDocument = async (documentId, newTitle) => {
+    await axios.put(`/api/documents/${documentId}/rename`, { title: newTitle })
+      .then((res) => {
+        setDocuments(documents.map(doc => doc.document_id === documentId ? { ...doc, title: newTitle } : doc));
+      })
+      .catch(error => {
+        // Handle error
+      });
+  }
+
+  const handleDeleteDocument = async (documentId) => { 
+    await axios.delete(`/api/documents/${documentId}`)
+      .then((res) => {
+        setDocuments(documents.filter(doc => doc.document_id !== documentId));
+      })
+      .catch(error => {
+        // Handle error
+      });
+  }
   
   const handleSortByTitle = () => {
     setDocuments((prev) => {
@@ -92,8 +102,8 @@ const handleRename = (id, newTitle) => {
     {/* Document Grid */}
     <DocumentCardGrid
       documents={documents}
-      handleDelete={handleDelete}
-      handleRename={handleRename}
+      handleDelete={handleDeleteDocument}
+      handleRename={handleRenameDocument}
     />
   </div>
 </>
