@@ -75,9 +75,38 @@ const updateDocumentContent = async (req, res) => {
   }
 };
 
+const renameDocument = async (req, res) => {
+  const { documentId } = req.params;
+  const { title } = req.body;
+  const userId = req.user && req.user.user_id;
+
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID not found.' });
+  }
+  if (!title || typeof title !== 'string') {
+    return res.status(400).json({ error: 'Invalid title.' });
+  }
+
+  try {
+    const updated = await db('documents')
+      .where({ user_id: userId, document_id: documentId })
+      .update({ title, updated_at: new Date() })
+      .returning(['document_id', 'title', 'updated_at']);
+
+    if (!updated || updated.length === 0) {
+      return res.status(404).json({ error: 'Document not found.' });
+    }
+    return res.status(200).json({ document: updated[0] });
+  } catch (error) {
+    console.error('Error renaming document:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 export {
     getDocuments,
     createDocument,
     getDocument,
     updateDocumentContent,
+    renameDocument
 };
