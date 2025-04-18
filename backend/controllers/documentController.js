@@ -44,7 +44,7 @@ const getDocument = async (req, res) => {
     return res.status(400).json({ error: 'User ID not found.' });
   }
   try {
-    const document = await db('documents').where({ user_id: userId, document_id: documentId }).first('*');
+    const document = await db('documents').where({ user_id: userId, document_id: documentId }).first(['content','title']);
     if (!document) {
       return res.status(404).json({ error: 'Document not found' });
     }
@@ -103,10 +103,34 @@ const renameDocument = async (req, res) => {
   }
 };
 
+const deleteDocument = async (req, res) => {
+  const { documentId } = req.params;
+  const userId = req.user && req.user.user_id;
+
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID not found.' });
+  }
+
+  try {
+    const deleted = await db('documents')
+      .where({ user_id: userId, document_id: documentId })
+      .del();
+
+    if (!deleted) {
+      return res.status(404).json({ error: 'Document not found.' });
+    }
+    return res.status(200).json({ message: 'Document deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting document:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 export {
     getDocuments,
     createDocument,
     getDocument,
     updateDocumentContent,
-    renameDocument
+    renameDocument,
+    deleteDocument
 };
