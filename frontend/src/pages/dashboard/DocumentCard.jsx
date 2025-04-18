@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Pencil } from "lucide-react";
-import { useTheme } from './components/ui/theme-provider';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,41 +10,28 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreVertical, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import  { useNavigate } from "react-router-dom";
 
 export default function DocumentCard({ 
+  documentId,
   title = "Untitled document", 
   timestamp = "Opened 2:10 AM",
   onDelete,
   onRename,
   isNew = false
 }) {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [isEditing, setIsEditing] = useState(isNew);
+  const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
-  const dropdownRef = useRef(null);
   const inputRef = useRef(null);
-  const { theme, setTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (isEditing) {
       setTimeout(() => {
         if (inputRef.current) {
           inputRef.current.focus();
-          if(isNew)
-            inputRef.current.select();
+          // if(isNew)
+            // inputRef.current.select();
         }
       }, 250);
     }
@@ -58,7 +44,6 @@ export default function DocumentCard({
 
   const handleRenameFromDropdown = (e) => {
     e.stopPropagation();
-
     setIsEditing(true);
   };
 
@@ -98,7 +83,7 @@ export default function DocumentCard({
               />
             ) : (
               <div className="flex items-center">
-                <h1 className="text-sm font-bold text-left leading-tight mt-1">{title}</h1>
+                <h1 className="text-sm font-bold text-left leading-tight mt-1" onClick={() => navigate(`/doc/${documentId}`)}>{title}</h1>
                 <button
                   className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity"
                   onClick={handleStartEdit}
