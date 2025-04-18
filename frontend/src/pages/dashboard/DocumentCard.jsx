@@ -17,8 +17,7 @@ export default function DocumentCard({
   timestamp = "Opened 2:10 AM",
   onDelete,
   onRename,
-  isNew 
-
+  isNew = false
 }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isEditing, setIsEditing] = useState(isNew);
