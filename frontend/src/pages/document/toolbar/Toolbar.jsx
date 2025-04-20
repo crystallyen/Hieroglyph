@@ -1,4 +1,8 @@
 import { useState } from "react";
+import { Sparkles } from 'lucide-react';
+import { Separator } from "@/components/ui/separator"
+import Menu from './Menu'
+import AITools from './AITools'
 
 import {
     Sidebar,
@@ -8,7 +12,8 @@ import {
     SidebarGroupContent,
     SidebarHeader,
     SidebarProvider,
-    SidebarSeparator
+    SidebarSeparator,
+    SidebarGroupLabel
 } from "@/components/ui/sidebar.jsx";
 
 import { Heading } from "./Heading.jsx";
@@ -30,8 +35,9 @@ const AppSidebar = ({ editor, isSaving }) => {
     return (
         <Sidebar variant="floating">
             <SidebarHeader>
+                <Menu></Menu>
                 <Input className="shadow-none border-none" type="text" placeholder="File Name" />
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                <div className="flex justify-center items-center gap-2 text-sm text-muted-foreground mt-1">
                     {isSaving ? (
                         <>
                             <svg
@@ -76,33 +82,52 @@ const AppSidebar = ({ editor, isSaving }) => {
                     )}
                 </div>
             </SidebarHeader>
+            <Separator />
             <SidebarContent className="overflow-hidden py-2 space-y-4">
                 <SidebarGroup>
-                    <SidebarGroupContent className="space-y-3">
-                        <FontFamiliy editor={editor} />
-                        <Heading editor={editor} />
-                        <div className="flex gap-1">
-                            <ColorPicker
-                                defaultColor={selectedColor}
-                                onChange={setSelectedColor}
-                                mode="text"
-                                editor={editor}
-                            />
-                            <ColorPicker
-                                defaultColor={highlightColor}
-                                onChange={setHighlightColor}
-                                mode="highlight"
-                                editor={editor}
-                            />
-                        </div>
-                        <FontTool editor={editor} />
-                        <TextAlign editor={editor} />
-                    </SidebarGroupContent>
+                    <div className="mb-3">
+                        <SidebarGroupLabel>Appearance</SidebarGroupLabel>
+                        <SidebarGroupContent className="space-y-3">
+                            <FontFamiliy editor={editor} />
+                            <Heading editor={editor} />
+                            <div className="flex gap-1">
+                                <ColorPicker
+                                    defaultColor={selectedColor}
+                                    onChange={setSelectedColor}
+                                    mode="text"
+                                    editor={editor}
+                                    />
+                                <ColorPicker
+                                    defaultColor={highlightColor}
+                                    onChange={setHighlightColor}
+                                    mode="highlight"
+                                    editor={editor}
+                                    />
+                            </div>
+                        </SidebarGroupContent>
+                    </div>
+                    <div className="mb-3">
+                        <SidebarGroupLabel>Formatting</SidebarGroupLabel>
+                        <SidebarGroupContent className="space-y-3">
+                            <FontTool editor={editor} />
+                        </SidebarGroupContent>
+                    </div>
+                    <div className="mb-3">
+                        <SidebarGroupLabel>Alignment</SidebarGroupLabel>
+                        <SidebarGroupContent className="space-y-3">
+                            <TextAlign editor={editor} />
+                        </SidebarGroupContent>
+                    </div>
+                    <div className="mb-3">
+                      <SidebarGroupLabel><Sparkles /> AI</SidebarGroupLabel>
+                      <SidebarGroupContent className="w-full flex flex-col items-center">
+                          <AITools></AITools>
+                      </SidebarGroupContent>
+                    </div>
+
                 </SidebarGroup>
+
             </SidebarContent>
-            <SidebarFooter>
-                <Label>Word count: {editor.storage.characterCount.words()}</Label>
-            </SidebarFooter>
         </Sidebar>
     );
 };

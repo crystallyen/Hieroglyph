@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle, Highlighter } from "lucide-react"
+import { Highlighter, Type } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -198,7 +198,7 @@ export const ColorPicker = ({ defaultColor = "#6366f1", onChange, mode = "text",
             <PopoverTrigger asChild>
                 <Button
                     variant="outline"
-                    className="justify-between cursor-pointer w-1/2"
+                    className="cursor-pointer flex align-center justify-evenly w-1/2"
                     aria-label={`Select ${mode} color. Current color: ${color}`}
                     onMouseDown={(e) => {
                         e.preventDefault()
@@ -220,9 +220,15 @@ export const ColorPicker = ({ defaultColor = "#6366f1", onChange, mode = "text",
 
                 >
                     {mode === "text" ? (
-                        <span className="text-xs font-bold">A</span>
+                      <>
+                        <Type />
+                        <span className="text-3xl" style={{ color }}>■</span>
+                      </>
                     ) : (
-                        <Highlighter style={{ color }}/>
+                      <>
+                        <Highlighter />
+                        <span className="text-3xl" style={{ color }}>■</span>
+                      </>
                     )}
                 </Button>
             </PopoverTrigger>

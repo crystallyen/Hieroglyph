@@ -129,16 +129,6 @@ const DocumentEditor = () => {
         <>
             <PaginationStyles />
             <div className="flex flex-col h-screen bg-background">
-                <div className="flex justify-end items-center p-2">
-                    <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" title="Share">
-                            <Share2 className="h-5 w-5" />
-                        </Button>
-                        <Button variant="ghost" size="icon" title="Profile">
-                            <UserCircle className="h-5 w-5" />
-                        </Button>
-                    </div>
-                </div>
                 <div className="flex flex-1 overflow-hidden">
                     <div className="flex-none h-full">
                         <Toolbar editor={editor} isSaving={isSaving} />
