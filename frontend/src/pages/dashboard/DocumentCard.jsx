@@ -9,7 +9,7 @@ import { MoreVertical, Trash2 } from "lucide-react";
 export default function DocumentCard({
   documentId,
   title = "Untitled document",
-  timestamp = "Opened 2:10 AM",
+  timestamp,
   onDelete,
   onRename,
   onClick,
@@ -86,7 +86,7 @@ export default function DocumentCard({
   
   const handleCardClick = () => {
     if (onClick) {
-      onClick();
+      onClick(documentId);
     }
   };
 
@@ -99,7 +99,7 @@ export default function DocumentCard({
     <Card
       className="transition-all duration-200 hover:shadow-md rounded-xl min-h-78 w-48 p-0 border-0 overflow-hidden bg-transparent relative"
     >
-      <div className="bg-gray-300 h-68 w-full rounded-xl cursor-pointer" onClick={handleCardClick}>
+      <div className="bg-gray-300 h-68 w-full rounded-xl">
         <div className="absolute bottom-0 left-0 w-full bg-secondary p-2 m-0 rounded-b-xl">
           <div className="group relative">
             {isEditing ? (
@@ -115,8 +115,9 @@ export default function DocumentCard({
             ) : (
               <div className="flex items-center">
                 <h1
-                  className="text-sm font-bold text-left leading-tight mt-1"
+                  className="text-sm font-bold text-left leading-tight mt-1 cursor-pointer"
                   onClick={handleCardClick}
+                  
                 >
                   {title}
                 </h1>

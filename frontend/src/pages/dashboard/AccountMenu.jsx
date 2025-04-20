@@ -1,50 +1,72 @@
-import { User, LogOut, Settings } from "lucide-react"
+import { LogOut, Moon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from "react-router-dom"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.jsx";
-import {useAuth} from "@/hooks/useAuth.js";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.jsx"
+import { useAuth } from "@/hooks/useAuth.js"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
+import { useTheme } from "@/components/theme-provider"
 
 function AccountMenu() {
   const navigate = useNavigate();
-    const { user, logout } = useAuth();
+  const { user, logout } = useAuth();
+  const { theme, setTheme } = useTheme();
+
   const handleLogout = async () => {
     await logout();
-  }
-    console.log(user)
+  };
+
+  const handleThemeToggle = (checked) => {
+    setTheme(checked ? "dark" : "light");
+  };
+
+  const isDark = theme === "dark";
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-      <Button variant="" className="p-5 cursor-pointer">
-        <span className="">{user.fullName}</span>
+      <Button
+  variant=""
+  className={`p-5 cursor-pointer transition-colors duration-300 ${
+    theme === "light"
+      ? "bg-gray-300 text-white hover:bg-gray-400"
+      : "bg-secondary text-white hover:bg-zinc-700"
+  }`}
+>
+          <span className="mr-2">{user.fullName}</span>
           <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>{user.fullName[0]}</AvatarFallback>
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>{user.fullName[0]}</AvatarFallback>
           </Avatar>
+        </Button>
+      </DropdownMenuTrigger>
 
-      </Button>
-      </ DropdownMenuTrigger>
       <DropdownMenuContent className="w-36">
-        <DropdownMenuItem>
-          <Settings />
-          <span>Settings</span>
-          <DropdownMenuShortcut>⇧⌘S</DropdownMenuShortcut>
+        <DropdownMenuItem className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Moon className="h-4 w-4" />
+            <Label htmlFor="dark-mode" className="text-sm">Dark</Label>
+          </div>
+          <Switch
+            id="dark-mode"
+            checked={isDark}
+            onCheckedChange={handleThemeToggle}
+          />
         </DropdownMenuItem>
+
         <DropdownMenuItem onSelect={handleLogout}>
-          <LogOut />
+          <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
 export default AccountMenu;

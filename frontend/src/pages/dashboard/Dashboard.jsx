@@ -6,6 +6,7 @@ import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuConten
 import { ArrowDownUp } from "lucide-react";
 import axios from "@/config/axiosConfig";
 import { useNavigate } from "react-router-dom";
+import { Plus } from "lucide-react";
 
 function Dashboard() {
   const[documents, setDocuments] = useState([]);
@@ -63,6 +64,18 @@ function Dashboard() {
       return sorted;
     });
   };
+
+  const handleSortByLastModified = () => {
+    setDocuments((prev) => {
+      const sorted = [...prev].sort((a, b) => {
+        const dateA = new Date(a.updated_at);
+        const dateB = new Date(b.updated_at);
+        return dateB - dateA; 
+      });
+      return sorted;
+    });
+  };
+  
   return (
     <>
     <div className="w-full flex justify-end p-5">
@@ -83,7 +96,7 @@ function Dashboard() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-36">
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick = {handleSortByLastModified}>
               <span>Last Modified</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleSortByTitle}>
@@ -94,6 +107,7 @@ function Dashboard() {
 
         {/* New Document Button */}
         <Button variant="secondary" onClick={handleAddDocument}>
+        <Plus className="mr-0 h-4 w-4" />
           New Document
         </Button>
       </div>
