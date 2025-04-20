@@ -16,6 +16,8 @@ import TiptapEditor from "./TiptapEditor.jsx";
 import { Button } from "@/components/ui/button.jsx";
 import { UserCircle, Share2 } from "lucide-react";
 import axios from "@/config/axiosConfig.js";
+import {AiLoading} from "@/pages/document/toolbar/AiLoadingMark.jsx";
+import {BulletList} from "@tiptap/extension-bullet-list";
 
 const DocumentEditor = () => {
     const { documentId } = useParams();
@@ -23,6 +25,7 @@ const DocumentEditor = () => {
     const [editorContent, setEditorContent] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
     const navigate = useNavigate();
+    const [documentTitle, setDocumentTitle] = useState("");
 
     const editor = useEditor({
         editorProps: {
@@ -45,8 +48,10 @@ const DocumentEditor = () => {
                 textCounter: (text) => [...new Intl.Segmenter().segment(text)].length,
             }),
             Underline,
+            BulletList,
             PageNode,
             PaginationExtension,
+            AiLoading.configure({}),
         ],
         content: null,
         autofocus: true,
@@ -60,12 +65,12 @@ const DocumentEditor = () => {
                 const docContent = response.data.content;
                 setInitialContent(docContent);
                 setEditorContent(docContent);
+                setDocumentTitle(response.data.title);
 
                 if (editor && docContent) {
                     editor.commands.setContent(docContent);
                 }
             } catch (error) {
-                console.error("Error fetching document", error);
                 navigate('/login');
             }
         };
@@ -131,7 +136,7 @@ const DocumentEditor = () => {
             <div className="flex flex-col h-screen bg-background">
                 <div className="flex flex-1 overflow-hidden">
                     <div className="flex-none h-full">
-                        <Toolbar editor={editor} isSaving={isSaving} />
+                        <Toolbar editor={editor} isSaving={isSaving} documentTitle={documentTitle} />
                     </div>
                     <div className="flex-grow h-full overflow-hidden">
                         {editor && <TiptapEditor editor={editor} />}

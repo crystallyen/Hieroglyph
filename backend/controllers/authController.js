@@ -51,7 +51,6 @@ const loginController = (req, res, next) => {
 
     req.login(user, (err) => {
       if (err) return next(err);
-      console.log("Logged in");
       const userData = {
         userId: user.user_id,
         email: user.email,

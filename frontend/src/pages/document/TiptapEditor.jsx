@@ -1,8 +1,7 @@
 import { useRef, useState, useEffect } from "react";
-import { BubbleMenu, EditorContent } from "@tiptap/react";
+import { EditorContent } from "@tiptap/react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { PaginationControls } from "./Pagination.jsx";
-import {Button} from "@/components/ui/button.jsx";
 
 const BASE_WIDTH = 814; // A4 width in pixels (210mm * 3.77953)
 
@@ -72,14 +71,6 @@ const TiptapEditor = ({ editor }) => {
                                 width: `${BASE_WIDTH}px`,
                             }}
                         >
-                            {editor && <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
-                                <div className="flex gap-2">
-                                    <Button >Fix Grammar</Button>
-                                    <Button>Summarize</Button>
-                                    <Button>Paraphrase</Button>
-                                    <Button>Translate</Button>
-                                </div>
-                            </BubbleMenu>}
                             <EditorContent
                                 editor={editor}
                                 className="mb-10 print:mb-0 dark:text-black"

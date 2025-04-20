@@ -2,7 +2,7 @@ import db from '../config/knex.js';
 const getDocuments = async (req, res) => {
   try {
     // We assume Passport attaches the user object on req
-    const userId = req.user.user_id;
+    const userId = req.user && req.user.user_id;
     if (!userId) {
       return res.status(400).json({ error: 'User ID not found.' });
     }
@@ -21,7 +21,7 @@ const getDocuments = async (req, res) => {
 };
 
 const createDocument = async (req, res) => {
-  const userId = req.user.user_id;
+  const userId = req.user && req.user.user_id;
   if (!userId) {
     return res.status(400).json({ error: 'User ID not found.' });
   }
@@ -63,7 +63,6 @@ const updateDocumentContent = async (req, res) => {
     return res.status(400).json({ error: 'User ID not found.' });
   }
   try {
-    console.log("UPdating")
     const document = await db('documents').where({ user_id: userId, document_id: documentId }).update({ content, updated_at: new Date() });
     if (!document || document.length === 0) {
       return res.status(404).json({ error: 'Document not found' });

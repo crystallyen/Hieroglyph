@@ -142,3 +142,36 @@
   margin-bottom: 0.25rem;
   line-height: 1.4;
 }
+
+.ai-loading {
+  background: linear-gradient(270deg, #ff6ec4, #7873f5, #4ADEDE, #C4FCEF, #ff6ec4);
+  background-size: 600% 600%;
+  animation: aiGlow 4s ease infinite;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+@keyframes aiGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.tiptap {
+  :first-child {
+    margin-top: 0;
+  }
+
+  /* List styles */
+  ul,
+  ol {
+    padding: 0 1rem;
+    margin: 1.25rem 1rem 1.25rem 0.4rem;
+    list-style-type:circle;
+    li p {
+      margin-top: 0.25em;
+      margin-bottom: 0.25em;
+    }
+  }
+}

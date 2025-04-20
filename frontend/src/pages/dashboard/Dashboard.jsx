@@ -83,12 +83,10 @@ function Dashboard() {
     </div>
    
   <div className="container mx-auto p-4 pt-2">
-    {/* Top Bar */}
     <div className="flex justify-between items-center mb-6">
       <h2 className="text-xl font-semibold ml-2">My Documents</h2>
 
       <div className="flex items-center gap-4">
-        {/* Sort Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
@@ -105,15 +103,13 @@ function Dashboard() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* New Document Button */}
-        <Button variant="secondary" onClick={handleAddDocument}>
+        <Button variant="secondary" className="cursor-pointer" onClick={handleAddDocument}>
         <Plus className="mr-0 h-4 w-4" />
           New Document
         </Button>
       </div>
     </div>
 
-    {/* Document Grid */}
     <DocumentCardGrid
       documents={documents}
       handleDelete={handleDeleteDocument}

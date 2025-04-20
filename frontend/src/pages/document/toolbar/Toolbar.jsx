@@ -25,18 +25,18 @@ import { FontTool } from "./FontTool.jsx";
 import { Label } from "@/components/ui/label.jsx";
 import { Input } from "@/components/ui/input.jsx";
 
-const AppSidebar = ({ editor, isSaving }) => {
+const AppSidebar = ({ editor, isSaving, documentTitle }) => {
     const [selectedColor, setSelectedColor] = useState("#6366f1");
     const [highlightColor, setHighlightColor] = useState("#090909");
     if(!editor) {
         return;
     }
-    console.log(isSaving);
+
     return (
         <Sidebar variant="floating">
             <SidebarHeader>
-                <Menu></Menu>
-                <Input className="shadow-none border-none" type="text" placeholder="File Name" />
+                <Menu/>
+                <Input className="shadow-none border-none" type="text" placeholder="File Name" value={documentTitle} disabled/>
                 <div className="flex justify-center items-center gap-2 text-sm text-muted-foreground mt-1">
                     {isSaving ? (
                         <>
@@ -121,7 +121,7 @@ const AppSidebar = ({ editor, isSaving }) => {
                     <div className="mb-3">
                       <SidebarGroupLabel><Sparkles /> AI</SidebarGroupLabel>
                       <SidebarGroupContent className="w-full flex flex-col items-center">
-                          <AITools></AITools>
+                          <AITools editor={editor} />
                       </SidebarGroupContent>
                     </div>
 
@@ -132,8 +132,8 @@ const AppSidebar = ({ editor, isSaving }) => {
     );
 };
 
-export const Toolbar = ({ editor, isSaving }) => (
+export const Toolbar = ({ editor, isSaving, documentTitle }) => (
     <SidebarProvider>
-        <AppSidebar editor={editor} isSaving={isSaving} />
+        <AppSidebar editor={editor} isSaving={isSaving} documentTitle={documentTitle} />
     </SidebarProvider>
 );
