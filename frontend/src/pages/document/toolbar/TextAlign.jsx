@@ -1,54 +1,45 @@
 import {AlignCenter, AlignJustify, AlignLeft, AlignRight} from "lucide-react"
-import {
-    ToggleGroup,
-    ToggleGroupItem,
-} from "@/components/ui/toggle-group"
+import { Button } from "@/components/ui/button"
 
 export const TextAlign = ({editor}) => {
-    const getToggleClass = (textAlign) =>
-        editor.isActive({ textAlign })
-            ? "bg-primary text-primary-foreground"
-            : "text-foreground hover:bg-muted";
     return (
-        <ToggleGroup type="single" variant="outline" size="lg" className="w-full">
-            <ToggleGroupItem
+        <div className="w-full flex justify-evenly">
+          <Button
+              variant="outline"
                 value="left"
                 aria-label="Toggle left"
-                // className="cursor-pointer data-[state=on]:bg-primary"
-                className={getToggleClass("left")}
+                className="w-[25%] rounded-none rounded-l-lg"
                 onClick={() => editor.chain().focus().setTextAlign('left').run()}
             >
                 <AlignLeft className="h-4 w-4" />
-            </ToggleGroupItem>
-            <ToggleGroupItem
+            </Button>
+            <Button
+                variant="outline"
                 value="center"
                 aria-label="Toggle center"
-                // className="cursor-pointer data-[state=on]:bg-primary "
-                className={getToggleClass("center")}
+                className="w-[25%] rounded-none"
                 onClick={() => editor.chain().focus().setTextAlign('center').run()}
             >
                 <AlignCenter className="h-4 w-4" />
-            </ToggleGroupItem>
-            <ToggleGroupItem
+            </Button>
+            <Button
+                variant="outline"
                 value="right"
                 aria-label="Toggle right"
-                // className="cursor-pointer data-[state=on]:bg-primary"
-                className={getToggleClass("right")}
+                className="w-[25%] rounded-none"
                 onClick={() => editor.chain().focus().setTextAlign('right').run()}
             >
-
                 <AlignRight className="h-4 w-4" />
-            </ToggleGroupItem>
-            <ToggleGroupItem
+            </Button>
+            <Button
+                variant="outline"
                 value="justify"
                 aria-label="Toggle justify"
-                // className="cursor-pointer data-[state=on]:bg-primary"
-                className={getToggleClass("justify")}
+                className="w-[25%] rounded-none rounded-r-lg"
                 onClick={() => editor.chain().focus().setTextAlign('justify').run()}
             >
-
                 <AlignJustify className="h-4 w-4" />
-            </ToggleGroupItem>
-        </ToggleGroup>
+            </Button>
+        </div>
     );
 };

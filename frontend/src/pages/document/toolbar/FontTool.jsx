@@ -1,53 +1,52 @@
 import {Bold, Italic, Strikethrough, Underline} from "lucide-react";
-import {
-    ToggleGroup,
-    ToggleGroupItem,
-} from "@/components/ui/toggle-group";
+import { Button } from "@/components/ui/button"
 
 export const FontTool = ({ editor }) => {
     if (!editor) return null;
 
-    const getToggleClass = (format) =>
-        editor.isActive(format)
-            ? "bg-primary text-primary-foreground"
-            : "text-foreground hover:bg-muted";
-
     return (
-        <ToggleGroup type="multiple" variant="outline" size="lg" className="w-full">
-            <ToggleGroupItem
-                value="bold"
+        <div className="w-full flex justify-evenly">
+            <Button 
+                variant="outline"
+                size="icon"
                 aria-label="Toggle bold"
-                className={getToggleClass("bold")}
+                className="w-[25%] rounded-none rounded-l-lg"
                 onClick={() => editor.chain().focus().toggleBold().run()}
             >
                 <Bold className="h-4 w-4" />
-            </ToggleGroupItem>
+            </Button>
 
-            <ToggleGroupItem
+            <Button 
+                variant="outline"
+                size="icon"
                 value="italic"
                 aria-label="Toggle italic"
-                className={getToggleClass("italic")}
+                className="w-[25%] rounded-none"
                 onClick={() => editor.chain().focus().toggleItalic().run()}
             >
                 <Italic className="h-4 w-4" />
-            </ToggleGroupItem>
-            <ToggleGroupItem
-                value="strike"
+            </Button>
+            <Button 
+                variant="outline" 
+                size="icon"
+                value="underline"
                 aria-label="Toggle underline"
-                className={getToggleClass("underline")}
+                className="w-[25%] rounded-none"
                 onClick={() => editor.chain().focus().toggleUnderline().run()}
             >
                 <Underline className="h-4 w-4" />
-            </ToggleGroupItem>
-            <ToggleGroupItem
+            </Button>
+            <Button 
+                variant="outline" 
+                size="icon"
                 value="strike"
                 aria-label="Toggle strikethrough"
-                className={getToggleClass("strike")}
+                className="w-[25%] rounded-none rounded-r-lg"
                 onClick={() => editor.chain().focus().toggleStrike().run()}
             >
                 <Strikethrough className="h-4 w-4" />
-            </ToggleGroupItem>
-
-        </ToggleGroup>
+            </Button>
+        </div>
+        
     );
 };

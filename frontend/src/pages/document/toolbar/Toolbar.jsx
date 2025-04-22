@@ -36,8 +36,9 @@ const AppSidebar = ({ editor, isSaving, documentTitle }) => {
         <Sidebar variant="floating">
             <SidebarHeader>
                 <Menu/>
+                <Separator />
                 <Input className="shadow-none border-none" type="text" placeholder="File Name" value={documentTitle} disabled/>
-                <div className="flex justify-center items-center gap-2 text-sm text-muted-foreground mt-1">
+                <div className="flex justify-center items-center gap-2 text-sm text-muted-foreground">
                     {isSaving ? (
                         <>
                             <svg
@@ -82,8 +83,8 @@ const AppSidebar = ({ editor, isSaving, documentTitle }) => {
                     )}
                 </div>
             </SidebarHeader>
-            <Separator />
-            <SidebarContent className="overflow-hidden py-2 space-y-4">
+            <Separator/>
+            <SidebarContent>
                 <SidebarGroup>
                     <div className="mb-3">
                         <SidebarGroupLabel>Appearance</SidebarGroupLabel>
@@ -119,10 +120,10 @@ const AppSidebar = ({ editor, isSaving, documentTitle }) => {
                         </SidebarGroupContent>
                     </div>
                     <div className="mb-3">
-                      <SidebarGroupLabel><Sparkles /> AI</SidebarGroupLabel>
-                      <SidebarGroupContent className="w-full flex flex-col items-center">
-                          <AITools editor={editor} />
-                      </SidebarGroupContent>
+                        <SidebarGroupLabel><Sparkles /> AI</SidebarGroupLabel>
+                        <SidebarGroupContent className="w-full flex flex-col items-center">
+                            <AITools editor={editor} />
+                        </SidebarGroupContent>
                     </div>
 
                 </SidebarGroup>
