@@ -5,6 +5,7 @@ import Dashboard from "./pages/dashboard/Dashboard"
 import {AuthProvider} from "@/context/AuthContext.jsx";
 import {useAuth} from "@/hooks/useAuth.js";
 import DocumentEditor from "@/pages/document/DocumentEditor.jsx";
+import {Toaster} from "@/components/ui/sonner.jsx";
 
 const PublicRoute = ({ children }) => {
     const { isAuthenticated } = useAuth();
@@ -37,6 +38,7 @@ function App() {
                   <Route path="/doc/:documentId" element={<DocumentEditor />} />
               </Routes>
           </Router>
+          <Toaster />
       </AuthProvider>
   )
 }

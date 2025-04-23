@@ -7,6 +7,7 @@ import { ArrowDownUp } from "lucide-react";
 import axios from "@/config/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
+import { toast } from "sonner";
 
 function Dashboard() {
   const[documents, setDocuments] = useState([]);
@@ -26,15 +27,14 @@ function Dashboard() {
   }, []);
 
   const handleAddDocument = async () => {
-    console.log("Add new doc");
-    
     await axios.post("/api/documents/create")
     .then((res) => {
-      const documentId = res.data.document[0].document_id; 
+      const documentId = res.data.document[0].document_id;
+      toast.success("Created document");
       navigate(`/doc/${documentId}`); 
     })
     .catch(error => {
-      // Toast here
+      toast.error("Error creating document");
     });
   };
 
@@ -42,9 +42,10 @@ function Dashboard() {
     await axios.put(`/api/documents/${documentId}/rename`, { title: newTitle })
       .then((res) => {
         setDocuments(documents.map(doc => doc.document_id === documentId ? { ...doc, title: newTitle } : doc));
+        toast.success("Document name updated");
       })
       .catch(error => {
-        // Handle error
+        toast.error("Error renaming document");
       });
   }
 
@@ -52,9 +53,10 @@ function Dashboard() {
     await axios.delete(`/api/documents/${documentId}`)
       .then((res) => {
         setDocuments(documents.filter(doc => doc.document_id !== documentId));
+        toast.success("Document deleted");
       })
       .catch(error => {
-        // Handle error
+        toast.error("Error deleting document");
       });
   }
   

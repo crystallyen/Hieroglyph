@@ -1,6 +1,6 @@
 import axios from '../config/axiosConfig.js';
 
-const handleSummarize = (req, res) => {
+const handleSummarize = async (req, res) => {
     const { text } = req.body;
 
     if(!req.user) {
@@ -10,7 +10,7 @@ const handleSummarize = (req, res) => {
     if(!text && text.length === 0) {
         return res.status(400).send('Wrong Submission');
     }
-    axios.post('/summarize', { text })
+    await axios.post('/summarize', { text })
         .then(response => {
             const data = response.data;
             return res.status(200).json(data);
@@ -21,7 +21,7 @@ const handleSummarize = (req, res) => {
         });
 };
 
-const handleBulletify = (req, res) => {
+const handleBulletify = async (req, res) => {
     const { text } = req.body;
 
     if(!req.user) {
@@ -31,7 +31,7 @@ const handleBulletify = (req, res) => {
     if(!text && text.length === 0) {
         return res.status(400).send('Wrong Submission');
     }
-    axios.post('/bulletify', { text })
+    await axios.post('/bulletify', { text })
         .then(response => {
             const data = response.data;
             return res.status(200).json(data);
@@ -42,7 +42,7 @@ const handleBulletify = (req, res) => {
         });
 };
 
-const handleParaphrase = (req, res) => {
+const handleParaphrase = async (req, res) => {
     const { text } = req.body;
 
     if(!req.user) {
@@ -52,7 +52,7 @@ const handleParaphrase = (req, res) => {
     if(!text && text.length === 0) {
         return res.status(400).send('Wrong Submission');
     }
-    axios.post('/paraphrase', { text })
+    await axios.post('/paraphrase', { text })
         .then(response => {
             const data = response.data;
             return res.status(200).json(data);
@@ -63,7 +63,7 @@ const handleParaphrase = (req, res) => {
         });
 };
 
-const handleProofread = (req, res) => {
+const handleProofread = async (req, res) => {
     const { text } = req.body;
 
     if(!req.user) {
@@ -73,7 +73,7 @@ const handleProofread = (req, res) => {
     if(!text && text.length === 0) {
         return res.status(400).send('Wrong Submission');
     }
-    axios.post('/proofread', { text })
+    await axios.post('/proofread', { text })
         .then(response => {
             const data = response.data;
             return res.status(200).json(data);

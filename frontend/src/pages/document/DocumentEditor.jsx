@@ -18,6 +18,7 @@ import { UserCircle, Share2 } from "lucide-react";
 import axios from "@/config/axiosConfig.js";
 import {AiLoading} from "@/pages/document/toolbar/AiLoadingMark.jsx";
 import {BulletList} from "@tiptap/extension-bullet-list";
+import {toast} from "sonner";
 
 const DocumentEditor = () => {
     const { documentId } = useParams();
@@ -80,22 +81,36 @@ const DocumentEditor = () => {
 
     const saveDocument = useCallback(async () => {
         if (!editor || !editorContent) return;
-        await axios.put(`/api/documents/${documentId}`, {
-            content: editorContent,
-        }).catch((error) => {
-            console.error("Error saving document", error);
+        await axios.put(`/api/documents/${documentId}`, { content: editorContent }, {
+            timeout: 15000,
         });
-    }, [editorContent, documentId, editor]);
+    }, [editor, editorContent, documentId]);
+
 
     useEffect(() => {
-        setIsSaving(true);
-        const timer = setInterval(() => {
-            saveDocument();
-            setIsSaving(false);
-        }, 5000);
+        let active = true;
+        let timerId;
 
-        return () => clearInterval(timer);
-    }, [editorContent]);
+        const loopSave = async () => {
+            if (!active) return;
+            if (editorContent) {
+                setIsSaving(true);
+                await saveDocument();
+                setIsSaving(false);
+                setEditorContent(false);
+            }
+            if (!active) return;
+            timerId = setTimeout(loopSave, 5000);
+        };
+
+        loopSave();
+
+        return () => {
+            active = false;
+            clearTimeout(timerId);
+        };
+    }, [editorContent, saveDocument]);
+
 
     useEffect(() => {
         const handleBeforeUnload = (event) => {
@@ -136,7 +151,7 @@ const DocumentEditor = () => {
             <div className="flex flex-col h-screen bg-background">
                 <div className="flex flex-1 overflow-hidden">
                     <div className="flex-none h-full">
-                        <Toolbar editor={editor} isSaving={isSaving} documentTitle={documentTitle} />
+                        <Toolbar editor={editor} isSaving={isSaving} documentTitle={documentTitle} saveDocument={saveDocument} />
                     </div>
                     <div className="flex-grow h-full overflow-hidden">
                         {editor && <TiptapEditor editor={editor} />}

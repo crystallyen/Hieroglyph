@@ -21,11 +21,9 @@ import FontFamiliy from "./FontFamily.jsx";
 import { ColorPicker } from "./ColorPicker.jsx";
 import { TextAlign } from "./TextAlign.jsx";
 import { FontTool } from "./FontTool.jsx";
-
-import { Label } from "@/components/ui/label.jsx";
 import { Input } from "@/components/ui/input.jsx";
 
-const AppSidebar = ({ editor, isSaving, documentTitle }) => {
+const AppSidebar = ({ editor, isSaving, documentTitle, saveDocument }) => {
     const [selectedColor, setSelectedColor] = useState("#6366f1");
     const [highlightColor, setHighlightColor] = useState("#090909");
     if(!editor) {
@@ -35,7 +33,7 @@ const AppSidebar = ({ editor, isSaving, documentTitle }) => {
     return (
         <Sidebar variant="floating">
             <SidebarHeader>
-                <Menu/>
+                <Menu saveDocument={saveDocument} editor={editor} />
                 <Separator />
                 <Input className="shadow-none border-none" type="text" placeholder="File Name" value={documentTitle} disabled/>
                 <div className="flex justify-center items-center gap-2 text-sm text-muted-foreground">
@@ -133,8 +131,8 @@ const AppSidebar = ({ editor, isSaving, documentTitle }) => {
     );
 };
 
-export const Toolbar = ({ editor, isSaving, documentTitle }) => (
+export const Toolbar = ({ editor, isSaving, documentTitle, saveDocument }) => (
     <SidebarProvider>
-        <AppSidebar editor={editor} isSaving={isSaving} documentTitle={documentTitle} />
+        <AppSidebar editor={editor} isSaving={isSaving} documentTitle={documentTitle} saveDocument={saveDocument} />
     </SidebarProvider>
 );

@@ -2,12 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Minimize2, TableOfContents, Hammer, NotebookPen } from 'lucide-react';
 import axios from '@/config/axiosConfig.js';
 import {useState} from "react";
+import {toast} from "sonner";
 
 const AITools = ({ editor }) => {
 
     const handleAIRequest = async (type) => {
         if (!editor) return;
-        console.log("Hello");
         const { from, to, empty } = editor.state.selection;
         const selectedText = editor.state.doc.textBetween(from, to, " ");
 
@@ -35,7 +35,8 @@ const AITools = ({ editor }) => {
                     .chain()
                     .focus()
                     .unsetMark('aiLoading')
-                    .run()
+                    .run();
+                toast.error(`Could not ${type}`);
             });
     };
 
