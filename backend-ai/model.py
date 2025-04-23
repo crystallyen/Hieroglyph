@@ -12,13 +12,14 @@ bnb_config = BitsAndBytesConfig(
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 base_model = AutoModelForSeq2SeqLM.from_pretrained(model_name, quantization_config=bnb_config, device_map="auto")
-base_model = PeftModel.from_pretrained(base_model, "./adaptors/summarize-adaptor", adapter_name="summarize")
-base_model.load_adapter("./adaptors/bulletify-adaptor", adapter_name="bulletify")
-base_model.load_adapter("./adaptors/paraphrase-adaptor", adapter_name="paraphrase")
-base_model.load_adapter("./adaptors/grammar-adaptor", adapter_name="proofread")
+base_model = PeftModel.from_pretrained(base_model, "./adaptors/summarize", adapter_name="summarize")
+base_model.load_adapter("./adaptors/bulletify", adapter_name="bulletify")
+base_model.load_adapter("./adaptors/paraphrase", adapter_name="paraphrase")
+base_model.load_adapter("./adaptors/proofread", adapter_name="proofread")
 base_model.eval()
 
 def summarize(prompt: str) -> str:
+  print(prompt)
   base_model.set_adapter("summarize")
   output_list = []
   small_prompts = long_segment(prompt)
@@ -31,6 +32,7 @@ def summarize(prompt: str) -> str:
   return stitch(output_list)
 
 def bulletify(prompt: str) -> str:
+  print(prompt)
   base_model.set_adapter("bulletify")
   output_list = []
   small_prompts = long_segment(prompt)
@@ -44,9 +46,9 @@ def bulletify(prompt: str) -> str:
   return stitch(output_list)
 
 def paraphrase(prompt: str) -> str:
+  print(prompt)
   base_model.set_adapter("paraphrase")
   prompt_list = segment(prompt)
-  print(prompt_list)
   output_list = []
   for prompt_element in prompt_list:
     formatted_prompt = "paraphrase: " + prompt_element
@@ -58,9 +60,9 @@ def paraphrase(prompt: str) -> str:
   return stitch(output_list)
 
 def proofread(prompt: str) -> str:
+  print(prompt)
   base_model.set_adapter("proofread")
   prompt_list = segment(prompt)
-  print(prompt_list)
   output_list = []
   for prompt_element in prompt_list:
     formatted_prompt = "fix grammar: " + prompt_element
