@@ -30,7 +30,6 @@ This project implements, Hieroglyph, a document editor enhanced with AI-powered 
 
 ## 👥 Contributors
 
-Team Name : AI Diddlers
 * [Ajitesh Singh](https://github.com/ajiteshhh)
 * [Adithya Sarma](https://github.com/adithyasarma24)
 * [Anirudh Vignesh](https://github.com/crystallyen)
