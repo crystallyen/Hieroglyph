@@ -4,6 +4,7 @@
 
 **Hieroglyph** is an AI-powered document editor designed to help users write better. It provides AI features such as summarization, bullet point generation, paraphrasing, and grammar correction using a FLAN-T5 model fine-tuned on a semi-custom dataset. The platform also features a rich-text editing interface, secure user authentication, and document management. It's powered by a Node.js backend for user and document management, and a FastAPI backend for AI inference.
 
+[![Watch Demo](https://via.placeholder.com/800x450.png?text=Click+to+Watch+Demo)](ai-pipeline/results/Hieroglyph-showcase.mp4)
 
 ## 📖 Table of Contents
 
